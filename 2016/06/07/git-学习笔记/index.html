@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>Git学习笔记 | Hexo</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="前言:123456781. add to index， stage, stash，未跟踪，都是什么意思，有什么区别？2. push和pull都做了些什么?3. fetch跟pull有什么区别4. 有些文件不想提交，但每次提交时都能看到，怎么办？5. 有个问题我有三个想法，都想试一下，怎么利用git优雅的实现？6. 在git.oschina上的库，秘钥什么的都配置好了，为什么还是没次都让我输用户名密">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Git学习笔记">
+<meta property="og:url" content="http://yoursite.com/2016/06/07/git-学习笔记/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="前言:123456781. add to index， stage, stash，未跟踪，都是什么意思，有什么区别？2. push和pull都做了些什么?3. fetch跟pull有什么区别4. 有些文件不想提交，但每次提交时都能看到，怎么办？5. 有个问题我有三个想法，都想试一下，怎么利用git优雅的实现？6. 在git.oschina上的库，秘钥什么的都配置好了，为什么还是没次都让我输用户名密">
+<meta property="og:image" content="https://git-scm.com/book/en/v2/book/01-introduction/images/snapshots.png">
+<meta property="og:image" content="https://git-scm.com/book/en/v2/book/01-introduction/images/areas.png">
+<meta property="og:image" content="https://git-scm.com/book/en/v2/book/02-git-basics/images/lifecycle.png">
+<meta property="og:image" content="https://git-scm.com/book/en/v2/book/03-git-branching/images/basic-branching-1.png">
+<meta property="og:image" content="https://git-scm.com/book/en/v2/book/03-git-branching/images/basic-branching-2.png">
+<meta property="og:image" content="https://git-scm.com/book/en/v2/book/03-git-branching/images/basic-branching-4.png">
+<meta property="og:image" content="https://git-scm.com/book/en/v2/book/03-git-branching/images/basic-branching-5.png">
+<meta property="og:image" content="https://git-scm.com/book/en/v2/book/03-git-branching/images/basic-merging-1.png">
+<meta property="og:image" content="https://git-scm.com/book/en/v2/book/03-git-branching/images/basic-merging-2.png">
+<meta property="og:image" content="https://git-scm.com/book/en/v2/book/03-git-branching/images/remote-branches-1.png">
+<meta property="og:image" content="https://git-scm.com/book/en/v2/book/03-git-branching/images/remote-branches-2.png">
+<meta property="og:image" content="https://git-scm.com/book/en/v2/book/03-git-branching/images/remote-branches-3.png">
+<meta property="og:image" content="https://git-scm.com/book/en/v2/book/03-git-branching/images/remote-branches-5.png">
+<meta property="og:updated_time" content="2016-06-07T15:38:29.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Git学习笔记">
+<meta name="twitter:description" content="前言:123456781. add to index， stage, stash，未跟踪，都是什么意思，有什么区别？2. push和pull都做了些什么?3. fetch跟pull有什么区别4. 有些文件不想提交，但每次提交时都能看到，怎么办？5. 有个问题我有三个想法，都想试一下，怎么利用git优雅的实现？6. 在git.oschina上的库，秘钥什么的都配置好了，为什么还是没次都让我输用户名密">
+<meta name="twitter:image" content="https://git-scm.com/book/en/v2/book/01-introduction/images/snapshots.png">
+  
+    <link rel="alternate" href="/atom.xml" title="Hexo" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link rel="stylesheet" href="/css/style.css">
+  
+
+</head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">Hexo</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" results="0" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://yoursite.com"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-git-学习笔记" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2016/06/07/git-学习笔记/" class="article-date">
+  <time datetime="2016-06-07T15:37:19.000Z" itemprop="datePublished">2016-06-07</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      Git学习笔记
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>前言:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">1. add to index， stage, stash，未跟踪，都是什么意思，有什么区别？</span><br><span class="line">2. push和pull都做了些什么?</span><br><span class="line">3. fetch跟pull有什么区别</span><br><span class="line">4. 有些文件不想提交，但每次提交时都能看到，怎么办？</span><br><span class="line">5. 有个问题我有三个想法，都想试一下，怎么利用git优雅的实现？</span><br><span class="line">6. 在git.oschina上的库，秘钥什么的都配置好了，为什么还是没次都让我输用户名密码？</span><br><span class="line">7. 为什么文件可能同时出现在暂存区和非暂存区</span><br><span class="line">8. git不是分布式的吗？为什么要有中心库？能不能开发者之间互相直接推送代码？</span><br></pre></td></tr></table></figure></p>
+<p>#基本概念：</p>
+<p><code>仓库</code> <code>分支</code> <code>提交</code></p>
+<p>#基础</p>
+<p>##基于快照<br><img src="https://git-scm.com/book/en/v2/book/01-introduction/images/snapshots.png" alt="此处输入图片的描述"></p>
+<p>##工作区</p>
+<p><img src="https://git-scm.com/book/en/v2/book/01-introduction/images/areas.png" alt="工作区"></p>
+<pre><code>仓库目录
+    是 Git 用来保存项目的元数据和对象数据库的地方。
+
+工作目录
+    是对项目的某个版本独立提取出来的内容。 这些从 Git 仓库的压缩数据库中提取出来的文件，放在磁盘上供你使用或修改。
+
+暂存区域
+    是一个文件，保存了下次将提交的文件列表信息，一般在 Git 仓库目录中。有时候也被称作“索引”，不过一般说法还是叫暂存区域。
+</code></pre><p>##文件状态和生命周期</p>
+<pre><code>文件状态
+</code></pre><p><code>已提交</code> <code>已暂存</code> <code>已修改</code> <code>未跟踪</code></p>
+<pre><code>文件生命周期
+</code></pre><p><img src="https://git-scm.com/book/en/v2/book/02-git-basics/images/lifecycle.png" alt="此处输入图片的描述"></p>
+<p>###检查当前文件状态</p>
+<p><code>git status</code>:</p>
+<pre><code>显示当前工作目录, index和最新的提交之间有什么不同
+</code></pre><p><code>git ls-files</code>:</p>
+<pre><code>显示git index中有哪些文件,(所有已跟踪文件)
+</code></pre><p>###跟踪新文件</p>
+<p><code>git add</code></p>
+<pre><code>这是个多功能命令：可以用它开始跟踪新文件，或者把已跟踪的文件放到暂存区，还能用于合并时把有冲突的文件标记为已解决状态等
+</code></pre><p>###暂存已修改文件<br>    文件可能同时出现在暂存区和非暂存区</p>
+<p>###忽略文件<br>.gitignore</p>
+<p>###查看变化<br><code>git diff</code><br><code>git diff --staged</code></p>
+<p>###提交<br><code>git commit -a</code><br>自动把所有已经跟踪过的文件暂存起来一并提交，从而跳过 git add 步骤</p>
+<p>###移除<br><code>rm a.txt</code><br><code>git rm a.txt</code></p>
+<p>###移动<br><code>mv a.txt</code></p>
+<p><code>git mv a.txt b.txt</code> 与下面的命令相同<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">mv a.txt b.txt</span><br><span class="line">git rm a.txt</span><br><span class="line">git add b.txt</span><br></pre></td></tr></table></figure></p>
+<p>###查看历史<br>    git log</p>
+<p>###场景：<br>        新建git库<br>        创建新文件，提交<br>        修改文件，add<br>        提交<br>        rm –cached a.txt<br>        git add<br>        修改文件，提交<br>        修改文件</p>
+<p>##撤销<br>    有些东西忘了提交了，但是又不想出现两次提交记录：<br><code>git commit --amend</code></p>
+<pre><code>最终你只会有一个提交 - 第二次提交将代替第一次提交的结果
+</code></pre><p>取消暂存的文件<br><code>git reset HEAD a.txt</code></p>
+<pre><code>a.txt会变成修改未暂存状态
+</code></pre><blockquote>
+<p>!加上–hard参数，会导致工作空间中的文件被还原，会丢失修改内容</p>
+</blockquote>
+<p>从修改状态还原成上次提交时的样子<br><code>git checkout -- a.txt</code></p>
+<p>#仓库</p>
+<p><code>git remote -v</code></p>
+<p>添加远程仓库：</p>
+<p><code>git remote add pb https://github.com/paulboone/ticgi</code><br><code>git fetch pb</code></p>
+<p>这个命令会访问远程仓库，从中拉取所有你还没有的数据。 执行完成后，你将会拥有那个远程仓库中所有分支的引用，可以随时合并或查看。</p>
+<pre><code>fetch 并不会自动合并或修改你当前的工作,如果你有一个分支设置为跟踪一个远程分支，可以使用 git pull命令来自动的抓取然后合并远程分支到当前分支
+git clone 命令会自动设置本地 master 分支跟踪克隆的远程仓库的 master 分支（或不管是什么名字的默认分支）
+</code></pre><p>查看远程仓库<br><code>git remote show [remote-name]</code></p>
+<p>推送到远程仓库<br><code>git push origin master</code></p>
+<p>远程仓库的移除与重命名<br><code>git remote rename pb paul</code><br><code>git remote rm paul</code></p>
+<p>#分支</p>
+<p>##本地分支</p>
+<p>创建分支<br><code>git branch [branch name]</code></p>
+<p>切换分支<br><code>git checkout [branch name]</code></p>
+<blockquote>
+<p>分支切换会改变你工作目录中的文件</p>
+</blockquote>
+<pre><code>在切换分支时，一定要注意你工作目录里的文件会被改变。 如果是切换到一个较旧的分支，你的工作目录会恢复到该分支最后一次提交时的样子。 如果 Git 不能干净利落地完成这个任务，它将禁止切换分支。
+</code></pre><p>###创建并切换分支<br><code>git checkout -b iss53</code>  相当与下面的命令<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">git branch iss53</span><br><span class="line">git checkout iss53</span><br></pre></td></tr></table></figure></p>
+<p>创建前:<br><img src="https://git-scm.com/book/en/v2/book/03-git-branching/images/basic-branching-1.png" alt="此处输入图片的描述"></p>
+<p>创建后:<br><img src="https://git-scm.com/book/en/v2/book/03-git-branching/images/basic-branching-2.png" alt="此处输入图片的描述"></p>
+<p>###合并分支<br><code>git merge [branch name]</code></p>
+<p>####fast-forward<br>合并前<br><img src="https://git-scm.com/book/en/v2/book/03-git-branching/images/basic-branching-4.png" alt="此处输入图片的描述"><br>合并后<br><img src="https://git-scm.com/book/en/v2/book/03-git-branching/images/basic-branching-5.png" alt="此处输入图片的描述"></p>
+<p>####三方合并<br>合并前<br><img src="https://git-scm.com/book/en/v2/book/03-git-branching/images/basic-merging-1.png" alt="此处输入图片的描述"></p>
+<p>合并后<br><img src="https://git-scm.com/book/en/v2/book/03-git-branching/images/basic-merging-2.png" alt="此处输入图片的描述"></p>
+<p>遇到冲突时的分支合并</p>
+<pre><code>此时 Git做了合并，但是没有自动地创建一个新的合并提交
+</code></pre><blockquote>
+<p>提问: 此时为什么需要reIndex?</p>
+</blockquote>
+<p>###查看分支<br><code>git branch</code><br>–merged 与 –no-merged 这两个有用的选项可以过滤这个列表中已经合并或尚未合并到当前分支的分支</p>
+<p>###删除分支</p>
+<p><code>git branch -d testing</code></p>
+<pre><code>可以使用 -D 选项强制删除它
+</code></pre><p>##远程分支<br>克隆之后的服务器与本地仓库<br><img src="https://git-scm.com/book/en/v2/book/03-git-branching/images/remote-branches-1.png" alt="此处输入图片的描述"><br>    分别做了修改</p>
+<p>远程分支做了修改，但是本地并没有fetch<br><img src="https://git-scm.com/book/en/v2/book/03-git-branching/images/remote-branches-2.png" alt="此处输入图片的描述"></p>
+<p>fetch之后<br><img src="https://git-scm.com/book/en/v2/book/03-git-branching/images/remote-branches-3.png" alt="此处输入图片的描述"></p>
+<p>pull就再fetch之后自动执行merge操作，<br>但是应该merge哪个分支呢？</p>
+<p>###远程分支的跟踪</p>
+<p>添加远程仓库<br><code>git remote add</code></p>
+<p>创建跟踪分支<br><code>git checkout -b sf origin/serverfix</code></p>
+<p>修改上游分支<br><code>git branch -u origin/serverfix</code></p>
+<blockquote>
+<p>可以用<code>git remote show [remote name]</code>查看远程分支的是否已跟踪</p>
+</blockquote>
+<p>推送远程分支<br>    <code>git push -u origin master</code></p>
+<p>删除远程分支<br>    <code>git push origin --delete serverfix</code></p>
+<p>多个远程仓库的模型<br><img src="https://git-scm.com/book/en/v2/book/03-git-branching/images/remote-branches-5.png" alt="此处输入图片的描述"></p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2016/06/07/git-学习笔记/" data-id="cip5m0yu00002yk7vw4agcq06" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+  
+    <a href="/2016/06/07/restful-api/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">RESTFUL API</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+
+  
+    
+
+  
+    
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/06/">June 2016</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2016/06/07/git-学习笔记/">Git学习笔记</a>
+          </li>
+        
+          <li>
+            <a href="/2016/06/07/restful-api/">RESTFUL API</a>
+          </li>
+        
+          <li>
+            <a href="/2016/06/07/hello-world/">Hello World</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2016 John Doe<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+
+  </div>
+</body>
+</html>
